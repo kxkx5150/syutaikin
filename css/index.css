@@ -1,0 +1,382 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    background-color:#fff;
+    background-attachment:fixed;
+    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    font-size:12px;
+    height:100%;
+    margin:0px;
+    padding:0px;
+    width:100%;
+}
+
+/* Portrait layout (default) */
+.app {
+    background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
+    position:absolute;             /* position in the center of the screen */
+    left:50%;
+    top:50%;
+    height:50px;                   /* text area height */
+    width:225px;                   /* text area width */
+    text-align:center;
+    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
+    margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
+                                   /* offset horizontal: half of text area width */
+}
+
+/* Landscape layout (with min-width) */
+@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
+    .app {
+        background-position:left center;
+        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
+        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
+                                      /* offset horizontal: half of image width and text area width */
+    }
+}
+
+h1 {
+    font-size:24px;
+    font-weight:normal;
+    margin:0px;
+    overflow:visible;
+    padding:0px;
+    text-align:center;
+}
+
+.event {
+    border-radius:4px;
+    -webkit-border-radius:4px;
+    color:#FFFFFF;
+    font-size:12px;
+    margin:0px 30px;
+    padding:2px 0px;
+}
+
+.event.listening {
+    background-color:#333333;
+    display:block;
+}
+
+.event.received {
+    background-color:#4B946A;
+    display:none;
+}
+
+@keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+ 
+@-webkit-keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+ 
+.blink {
+    animation:fade 3000ms infinite;
+    -webkit-animation:fade 3000ms infinite;
+}
+.st_btn{
+    font-size: 22px;
+    padding: 12px 24px;
+    margin: 16px 24px 12px 24px;
+}
+#loadingModal{
+     display: none; 
+     position: fixed;
+     width: 100%;
+     z-index: 1001;
+}
+@-webkit-keyframes circles {
+  0% {
+    -webkit-transform: rotate(-720deg);
+    -moz-transform: rotate(-720deg);
+    -ms-transform: rotate(-720deg);
+    -o-transform: rotate(-720deg);
+    transform: rotate(-720deg);
+  }
+
+  50% {
+    -webkit-transform: rotate(720deg);
+    -moz-transform: rotate(720deg);
+    -ms-transform: rotate(720deg);
+    -o-transform: rotate(720deg);
+    transform: rotate(720deg);
+  }
+}
+@keyframes circles {
+  0% {
+    -webkit-transform: rotate(-720deg);
+    -moz-transform: rotate(-720deg);
+    -ms-transform: rotate(-720deg);
+    -o-transform: rotate(-720deg);
+    transform: rotate(-720deg);
+  }
+
+  50% {
+    -webkit-transform: rotate(720deg);
+    -moz-transform: rotate(720deg);
+    -ms-transform: rotate(720deg);
+    -o-transform: rotate(720deg);
+    transform: rotate(720deg);
+  }
+}
+.circles {
+  font-family: sans-serif;
+  font-weight: 100;
+}
+.circles:not(:required) {
+  margin: 50px auto 0 auto;
+  position: relative;
+  text-indent: -9999px;
+  width: 25px;
+  height: 25px;
+  background: hotpink;
+  border-radius: 100%;
+  -webkit-animation: circles 3s infinite ease-in-out;
+  -moz-animation: circles 3s infinite ease-in-out;
+  -ms-animation: circles 3s infinite ease-in-out;
+  -o-animation: circles 3s infinite ease-in-out;
+  animation: circles 3s infinite ease-in-out;
+  -webkit-transform-origin: 50% 100%;
+  -moz-transform-origin: 50% 100%;
+  -ms-transform-origin: 50% 100%;
+  -o-transform-origin: 50% 100%;
+  transform-origin: 50% 100%;
+  display: block;
+}
+.circles:not(:required)::before {
+  background: antiquewhite;
+  border-radius: 100%;
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 18.75px;
+  left: -10.82532px;
+}
+.circles:not(:required)::after {
+  background: pink;
+  border-radius: 100%;
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 18.75px;
+  left: 10.82532px;
+}
+
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-ms-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-moz-keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-ms-keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+#time_info{
+    font-size: 18px;
+    color: deeppink;
+    text-align: center;
+}
+#calendar {
+    max-width: 900px;
+    margin: 0 auto;
+}
+.wrapper {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+}
+.warpdiv {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: -500px;
+    color: #777;
+    text-align: center;
+    background: rgba(0,0,0,.8);
+    z-index: 999;
+    font-size: 13px;
+    transition-property: left;
+    transition-duration: 0.3s;
+}
+.warpcontainer{
+  position: relative;
+}
+.warpcontainer {background-color: #fff;position: absolute;color: black;border: 1px solid #ccc;border-radius: 3px;font-size: 16px;padding: 18px 12px 42px 12px;width: 94%;left: 3%;top: 36px;box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 6px;overflow-y: auto;z-index: 1000;box-sizing: border-box;text-align: left;padding-left: 18px;}
+.time_inpt{
+  font-size: 18px;
+  padding:4px;
+}
+#syusei_btn{
+  font-size: 20px;
+  padding: 4px 24px;
+}
+#kingaku{
+  text-align: center;
+  color: deeppink;
+  font-size: 18px;
+  margin: 0;
+}
+.fc-day-header.fc-widget-header.fc-sat{
+    color: #FF0000;
+}
+.fc-day-header.fc-widget-header.fc-sun{
+    color: #FF0000;
+}
+.fc-day-header.fc-widget-header{
+  background: lavender;
+}
+.css-cancel{
+  display: inline-block;
+  position: relative;
+  margin: 0 20px 0 7px;
+  padding: 0;
+  width: 4px;
+  height: 28px;
+  background: #888;
+  transform: rotate(45deg);
+}
+.css-cancel:before{
+  display: block;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -12px;
+  width: 28px;
+  height: 4px;
+  margin-top: -2px;
+  background: #888;
+}
+#cancel_opt_container{
+  position: absolute;
+  top: 8px;
+  right: 0;
+}
+#cancel_setting_container{
+  position: absolute;
+  top: 8px;
+  right: 0;
+}
+.lbl{
+  margin: 4px 0 18px 0;
+  text-transform: none;
+}
+#settingdiv input{
+  width: 4em;
+  text-align: right;
+  vertical-align: middle;
+  padding: 4px;
+  font-size: 18px;
+}
+.setting_lbl{
+  font-size: 14px;
+  display: inline-block;
+  width: 140px;
+}
+#setting_ok_btn{
+  padding: 4px 12px;
+  font-size: 18px;
+}
+.show_setting_btn{
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-align: right;
+  padding: 8px;
+  margin: 0;
+/*    position: fixed;
+    top: 1px;
+    right: 1px;
+    padding: 2px;
+    cursor: pointer;*/
+}
+#syusei_sakuzyo_btn{
+  padding: 4px;
+  font-size: 15px;
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+	    <meta charset="utf-8"/>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+	<link rel="shortcut icon" href="img/favicon.png">
+	<link rel="icon" href="img/favicon_chrome.png" sizes="192x192" />
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+		<link href='css/fullcalendar.min.css' rel='stylesheet' />
+		<link href='css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+		<script src='js/lib/moment.min.js'></script>
+		<script src='js/lib/jquery.min.js'></script>
+		<script src='js/fullcalendar.min.js'></script>
+        <title>給料計算</title>
+    </head>
+    <body>
+        <div class="app" style="display: none;">
+            <h1>Apache Cordova</h1>
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>
+            </div>
+        </div>
+
+        <div class="show_setting_btn">
+            <img src="img/setting.png" id="setting_img">
+        </div>
+
+        
+        <div style="text-align: center;margin-top: 18px;">
+        	<button class="st_btn" id="syukin_btn">出勤</button>
+            <button class="st_btn" id="taikin_btn">退勤</button>
+        </div>
+        <div>
+            <h3 id="kingaku">￥0</h3>
+        </div>
+        <div id="loadingModal" class="modalDialog">
+        	<div id="time_info">
+        	</div>
+            <span class="circles"></span>
+        </div>
+        <div id="calender_container" style="margin-top: 24px;">
+			<div id='calendar'></div>
+        </div>
+        <div id="optdiv" style="display: none;" class="warpdiv">
+            <div id="optcontainer" class="warpcontainer" style="text-align: center;">
+                <div id="cancel_opt_container">
+                    <div class="css-cancel"></div>
+                </div>
+                <h3 id="syusei_day"></h3>
+                <div>
+                    出勤 : <input type="time" class="time_inpt" value="08:36" id="syukin_syusei_btn">
+                </div>
+                <div style="margin-top: 12px">
+                    退勤 : <input type="time" class="time_inpt" value="17:01" id="taikin_syusei_btn">
+                </div>
+                <div style="margin-top: 54px">
+                    <button id="syusei_btn">OK</button>
+                </div>
+                <div style="margin-top: 54px">
+                    <button id="syusei_sakuzyo_btn">削除(Delete)</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="settingdiv" style="display: none;" class="warpdiv">
+            <div id="setting_container" class="warpcontainer" style="text-align: center;">
+                <h3 class="lbl">Settings</h3>
+                <div style="text-align: left;">
+                    <div>
+                        <label class="setting_lbl">時給(hourly wage)</label> <input type="number" id="zikyu_inpt" value="0" min="0" max="100000"> 円
+                    </div>
+                    <div style="margin-top: 18px;">
+                        <label class="setting_lbl">開始(Start)</label> <input type="number" id="kaishi_inpt" value="9" min="0" max="23"> 時
+                    </div>
+                    <div style="margin-top: 18px;">
+                        <label class="setting_lbl">終了(End)</label> <input type="number" id="end_inpt" value="17" min="0" max="23"> 時
+                    </div>
+                    <div style="margin-top: 18px;">
+                        <label class="setting_lbl">休憩(Break)</label> <input type="number" id="kyukei_inpt" value="12" min="0" max="23"> 時
+                    </div>
+                    <div style="margin-top: 18px;">
+                        <label class="setting_lbl">休憩(Break time)</label> <input type="number" id="kyukei_time_inpt" value="60" min="0" max="180"> 分
+                    </div>
+                    <div style="margin-top: 18px;">
+                        <label class="setting_lbl">残業(Overtime)</label> <input type="number" id="zangyo_inpt" value="25" min="0" max="500" style="width: 2em;"> % UP
+                    </div>
+                    <div style="margin-top: 32px;text-align:center;">
+                        <button id="setting_ok_btn">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>
