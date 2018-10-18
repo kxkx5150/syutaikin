@@ -387,14 +387,21 @@ function coundKyurou(stime,etime,day,str){
             wh = parseInt(wm / 60);
             wm = wm % 60;
 
-            en += wh * optobj.tingin;
-            en += parseInt(wm / 15) * tingin15m;
-
             zm = (eh*60+em) - (syuryo*60);
             zh = parseInt(zm / 60);
             zm = zm % 60;
 
-            var ztingin = optobj.tingin*(1+(optobj.zangyoup/100));
+            if(wh + zh > 8){
+                var ztingin = optobj.tingin*(1+(optobj.zangyoup/100));
+                zh = wh + zh -8;
+                wh = 8;
+            }else{
+                var ztingin = optobj.tingin;
+            }
+
+            en += wh * optobj.tingin;
+            en += parseInt(wm / 15) * tingin15m;
+
             var ztingin15m = parseInt(ztingin/4);
             zen += zh * ztingin;
             zen += parseInt(zm / 15) * ztingin15m;
